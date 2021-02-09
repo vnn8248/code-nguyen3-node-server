@@ -54,6 +54,10 @@ app.post("/", (req, res) => {
 
 });
 
-app.listen(5000, () => {
-  console.log("The server is running on port 5000");
+let port = process.env.PORT;
+if (port == null || port == "") {
+  port = 5000;
+}
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}.`);
 });
