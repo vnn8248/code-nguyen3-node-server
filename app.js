@@ -28,7 +28,7 @@ app.post("/", (req, res) => {
 
     const transporter = nodemailer.createTransport({
       host: "smtp.zoho.com",
-      port: process.env.ZOHO_PORT,
+      port: 465,
       secure: true,
       auth: {
           user: process.env.ZOHO_UN, 
@@ -36,16 +36,18 @@ app.post("/", (req, res) => {
       },
     });
 
-    const info = await transporter.sendMail({
-        from: process.env.ZOHO_UN, // sender address
+    await transporter.sendMail({
+        from: `Code Nguyen <${process.env.ZOHO_UN}>`, // sender address
         to: process.env.ZOHO_UN, // list of receivers
         subject: "New message from the Code Nguyen contact form.", // Subject line
         html: output, // html body
-    }, (error) => {
+    }, (error, info) => {
       if (error) {
-        res.json({ status: "failed" });
+        console.log(error);
+        res.json({ status: "Message failed. Check nodemailer error." });
       } else {
-        res.json({ status: "sent" });
+        console.log(info);
+        res.json(info);
       }
     });
   };
